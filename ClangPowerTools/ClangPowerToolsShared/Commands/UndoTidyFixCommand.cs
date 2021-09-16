@@ -5,6 +5,8 @@ using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.IO;
+using System.Linq;
 using System.Text;
 using Task = System.Threading.Tasks.Task;
 
@@ -73,25 +75,22 @@ namespace ClangPowerToolsShared.Commands
     {
       await PrepareCommmandAsync(commandUILocation, jsonCompilationDbActive);
 
-      await Task.Run(() =>
+      if (Directory.Exists(TidyConstants.TidyTempPath))
       {
-        lock (mutex)
-        {
-          try
-          {
-            RunScript(aCommandId, jsonCompilationDbActive);
-          }
-          catch (Exception exception)
-          {
-            VsShellUtilities.ShowMessageBox(AsyncPackage, exception.Message, "Error",
-              OLEMSGICON.OLEMSGICON_CRITICAL, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
-          }
-        }
+        FilePathCollector fileCollector = new FilePathCollector();
+        var filesPath = fileCollector.Collect(mItemsCollector.Items).ToList();
 
-      });
+
+        foreach (string path in filesPath)
+        {
+          FileInfo file = new(path);
+          string text = File.ReadAllText(Path.Combine(TidyConstants.TidyTempPath, "_" + file.Name));
+          File.WriteAllText(file.FullName, text);       
+        }
+        //Directory.Delete(TidyConstants.TidyTempPath, true);
+      }
     }
     #endregion
-
   }
 
 }
