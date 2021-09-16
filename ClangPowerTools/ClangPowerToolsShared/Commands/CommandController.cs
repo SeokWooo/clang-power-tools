@@ -87,7 +87,10 @@ namespace ClangPowerTools
         await TidyCommand.InitializeAsync(this, aAsyncPackage, mCommandSet, CommandIds.kTidyFixId);
         await TidyCommand.InitializeAsync(this, aAsyncPackage, mCommandSet, CommandIds.kTidyFixToolbarId);
       }
-
+      if (ClangPowerToolsShared.Commands.UndoTidyFixCommand.Instance == null)
+      {
+        await ClangPowerToolsShared.Commands.UndoTidyFixCommand.InitializeAsync(this, aAsyncPackage, mCommandSet, CommandIds.kUndoTidyFixId);
+      }
       if (FormatCommand.Instance == null)
       {
         await FormatCommand.InitializeAsync(this, aAsyncPackage, mCommandSet, CommandIds.kClangFormat);
@@ -223,6 +226,15 @@ namespace ClangPowerTools
             OnBeforeClangCommand(CommandIds.kTidyFixId);
 
             await TidyCommand.Instance.RunClangTidyAsync(CommandIds.kTidyFixId, aCommandUILocation);
+            OnAfterClangCommand();
+            break;
+          }
+        case CommandIds.kUndoTidyFixId:
+          {
+            await StopBackgroundRunnersAsync();
+            OnBeforeClangCommand(CommandIds.kUndoTidyFixId);
+
+            await ClangPowerToolsShared.Commands.UndoTidyFixCommand.Instance.RunClangUndoTidyFixAsync(CommandIds.kUndoTidyFixId, aCommandUILocation);
             OnAfterClangCommand();
             break;
           }

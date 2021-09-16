@@ -13,6 +13,7 @@ namespace ClangPowerTools
       0x0101,
       0x1101,
       0x0109,
+      0x010A,
       0x1102,
       0x0105,
       0x1103,
@@ -32,6 +33,7 @@ namespace ClangPowerTools
       257,
       4353,
       265,
+      266,
       4354,
       261,
       4355,
@@ -51,6 +53,7 @@ namespace ClangPowerTools
     public const int kTidyToolbarId = 0x1101;
 
     public const int kTidyFixId = 0x0109;
+    public const int kUndoTidyFixId = 0x010A;
     public const int kTidyFixToolbarId = 0x1102;
 
     public const int kClangFormat = 0x0105;
