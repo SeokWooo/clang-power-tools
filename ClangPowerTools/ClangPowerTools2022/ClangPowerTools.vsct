@@ -198,6 +198,14 @@
         </Strings>
       </Button>
 
+      <Button guid="guidClangPowerToolsPackageCmdSet" id="UndoTidyFixId" priority="0x0003" type="Button">
+        <Parent guid="guidClangPowerToolsPackageCmdSet" id="DropDownToolbarMenuGroup" />
+        <Icon guid="guidImageUndoTidyFix" id="UndoTidyFix" />
+        <Strings>
+          <ButtonText>Undo Tidy Fix</ButtonText>
+        </Strings>
+      </Button>
+
       <Button guid="guidClangPowerToolsPackageCmdSet" id="ClangFormatToolbarId" priority="0x0003" type="Button">
         <Parent guid="guidClangPowerToolsPackageCmdSet" id="ToolbarGroup" />
         <Icon guid="guidImageFormat" id="Format" />
@@ -228,6 +236,7 @@
 		<Bitmaps>
 			<Bitmap guid="guidImages" href="..\ClangPowerToolsShared\Resources\CPTLogo.png" usedList="bmpPic1" />
 			<Bitmap guid="guidImageTidy" href="..\ClangPowerToolsShared\Resources\TidyIcon.png" usedList="Tidy" />
+			<Bitmap guid="guidImageUndoTidyFix" href="..\ClangPowerToolsShared\Resources\TidyIcon.png" usedList="UndoTidyFix" />
 			<Bitmap guid="guidImageCompile" href="..\ClangPowerToolsShared\Resources\CompileIcon.png" usedList="Compile" />
 			<Bitmap guid="guidImageFormat" href="..\ClangPowerToolsShared\Resources\ClangFormatIcon.png" usedList="Format" />
 			<Bitmap guid="guidImageStopClang" href="..\ClangPowerToolsShared\Resources\StopCommandIcon.png" usedList="StopClang" />
@@ -338,6 +347,7 @@
 
       <IDSymbol name="TidyId" value="0x0101" />
       <IDSymbol name="TidyFixId" value="0x0109" />
+      <IDSymbol name="UndoTidyFixId" value="0x010A" />
 
       <IDSymbol name="TidyToolbarId" value="0x1101" />
       <IDSymbol name="TidyFixToolbarId" value="0x1102" />
@@ -371,6 +381,11 @@
       <IDSymbol name="Tidy" value="1" />
     </GuidSymbol>
 
+    <!-- Define clang undo tidy fix image -->
+    <GuidSymbol name="guidImageUndoTidyFix" value="{170dc950-6f83-44cf-ac7d-dcd724f58350}">
+      <IDSymbol name="UndoTidyFix" value="1" />
+    </GuidSymbol>
+    
     <!-- Define clang compile image -->
     <GuidSymbol name="guidImageCompile" value="{6ef146ba-e044-43ab-989d-c4a1d6d5c70e}">
       <IDSymbol name="Compile" value="1" />
