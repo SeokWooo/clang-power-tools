@@ -1,5 +1,9 @@
 ﻿using ClangPowerTools;
 using ClangPowerTools.Commands;
+using ClangPowerTools.Helpers;
+using ClangPowerTools.Services;
+using ClangPowerTools.SilentFile;
+using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
@@ -75,20 +79,49 @@ namespace ClangPowerToolsShared.Commands
     {
       await PrepareCommmandAsync(commandUILocation, jsonCompilationDbActive);
 
-      if (Directory.Exists(TidyConstants.TidyTempPath))
+
+      await Task.Run(() =>
       {
-        FilePathCollector fileCollector = new FilePathCollector();
-        var filesPath = fileCollector.Collect(mItemsCollector.Items).ToList();
-
-
-        foreach (string path in filesPath)
+        lock (mutex)
         {
-          FileInfo file = new(path);
-          string text = File.ReadAllText(Path.Combine(TidyConstants.TidyTempPath, "_" + file.Name));
-          File.WriteAllText(file.FullName, text);       
+          try
+          {
+            using var silentFileController = new SilentFileChangerController();
+            using var fileChangerWatcher = new FileChangerWatcher();
+
+            var tidySettings = SettingsProvider.TidySettingsModel;
+            fileChangerWatcher.OnChanged += FileOpener.Open;
+
+            var dte2 = VsServiceProvider.GetService(typeof(DTE2)) as DTE2;
+            string solutionFolderPath = SolutionInfo.IsOpenFolderModeActive() ?
+              dte2.Solution.FullName : dte2.Solution.FullName
+                                        .Substring(0, dte2.Solution.FullName.LastIndexOf('\\'));
+            fileChangerWatcher.Run(solutionFolderPath);
+
+            FilePathCollector fileCollector = new FilePathCollector();
+            var filesPath = fileCollector.Collect(mItemsCollector.Items).ToList();
+
+            silentFileController.SilentFiles(filesPath);
+            silentFileController.SilentFiles(dte2.Documents);
+
+            if (Directory.Exists(TidyConstants.TidyTempPath))
+            {
+              foreach (string path in filesPath)
+              {
+                FileInfo file = new(path);
+                string text = File.ReadAllText(Path.Combine(TidyConstants.TidyTempPath, "_" + file.Name));
+                File.WriteAllText(file.FullName, text);
+              }
+              Directory.Delete(TidyConstants.TidyTempPath, true);
+            }
+          }
+          catch (Exception exception)
+          {
+            VsShellUtilities.ShowMessageBox(AsyncPackage, exception.Message, "Error",
+              OLEMSGICON.OLEMSGICON_CRITICAL, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+          }
         }
-        //Directory.Delete(TidyConstants.TidyTempPath, true);
-      }
+      });
     }
     #endregion
   }
