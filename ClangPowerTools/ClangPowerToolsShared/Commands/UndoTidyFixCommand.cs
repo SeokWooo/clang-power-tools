@@ -89,8 +89,8 @@ namespace ClangPowerToolsShared.Commands
             using var silentFileController = new SilentFileChangerController();
             using var fileChangerWatcher = new FileChangerWatcher();
 
-            var tidySettings = SettingsProvider.TidySettingsModel;
-            fileChangerWatcher.OnChanged += FileOpener.Open;
+            //var tidySettings = SettingsProvider.TidySettingsModel;
+            //fileChangerWatcher.OnChanged += FileOpener.Open;
 
             var dte2 = VsServiceProvider.GetService(typeof(DTE2)) as DTE2;
             string solutionFolderPath = SolutionInfo.IsOpenFolderModeActive() ?

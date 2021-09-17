@@ -89,12 +89,22 @@
       </Button>
 
       <!-- Clang Tidy-Fix context menu button  -->
-      <Button guid="guidClangPowerToolsPackageCmdSet" id="TidyFixId" priority="0x0003" type="Button">
+      <Button guid="guidClangPowerToolsPackageCmdSet" id="TidyFixId" priority="0x0002" type="Button">
         <Parent guid="guidClangPowerToolsPackageCmdSet" id="GroupForCommands" />
         <Icon guid="guidImageEmpty" id="Empty" />
         <CommandFlag>DefaultDisabled</CommandFlag>
         <Strings>
           <ButtonText>Tidy-Fix</ButtonText>
+        </Strings>
+      </Button>
+
+      <!-- Clang Undo Tidy-Fix context menu button  -->
+      <Button guid="guidClangPowerToolsPackageCmdSet" id="UndoTidyFixId" priority="0x0003" type="Button">
+        <Parent guid="guidClangPowerToolsPackageCmdSet" id="GroupForCommands" />
+        <Icon guid="guidImageUndoTidyFix" id="UndoTidyFix" />
+        <CommandFlag>DefaultDisabled</CommandFlag>
+        <Strings>
+          <ButtonText>Undo Tidy-Fix</ButtonText>
         </Strings>
       </Button>
 
@@ -201,6 +211,7 @@
       <Button guid="guidClangPowerToolsPackageCmdSet" id="UndoTidyFixId" priority="0x0003" type="Button">
         <Parent guid="guidClangPowerToolsPackageCmdSet" id="DropDownToolbarMenuGroup" />
         <Icon guid="guidImageUndoTidyFix" id="UndoTidyFix" />
+        <CommandFlag>DefaultDisabled</CommandFlag>
         <Strings>
           <ButtonText>Undo Tidy Fix</ButtonText>
         </Strings>
