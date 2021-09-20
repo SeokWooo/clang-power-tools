@@ -8,6 +8,8 @@ using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.ComponentModel.Design;
 using System.Linq;
+using System.IO;
+using System.Windows.Forms;
 using Task = System.Threading.Tasks.Task;
 
 namespace ClangPowerTools.Commands
@@ -27,7 +29,8 @@ namespace ClangPowerTools.Commands
       get;
       private set;
     }
-
+    
+    private static readonly int maxTidyFiles = 10;
     #endregion
 
 
@@ -103,6 +106,11 @@ namespace ClangPowerTools.Commands
 
               FilePathCollector fileCollector = new FilePathCollector();
               var filesPath = fileCollector.Collect(mItemsCollector.Items).ToList();
+              if (filesPath.Count >= maxTidyFiles)
+              {
+                MessageBox.Show("You can apply tidy fix to maxim 10 files", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+              }
 
               silentFileController.SilentFiles(filesPath);
               silentFileController.SilentFiles(dte2.Documents);
